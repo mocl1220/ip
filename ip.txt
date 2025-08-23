@@ -11,5 +11,5 @@
 104.19.61.37:8443#United States
 172.67.254.88:8443#Netherlands
 104.16.30.79:8443#United States
-104.17.206.221:8443#United States
 104.18.253.148:8443#United States
+104.17.206.221:8443#United States
