@@ -1,15 +1,15 @@
-104.18.31.199:8443#United Kingdom
-104.16.110.178:8443#United Kingdom
-104.16.109.5:8443#United Kingdom
-104.19.239.194:8443#United Kingdom
-104.19.237.25:8443#United Kingdom
-104.18.41.164:8443#United States
-104.18.45.157:8443#United States
-172.64.149.102:8443#United States
-172.64.145.211:8443#United States
-104.24.157.111:8443#United States
-172.64.229.223:8443#Japan
-104.18.37.180:8443#United States
-104.21.63.236:8443#Netherlands
-172.64.158.84:8443#United States
-104.16.78.206:8443#United States
+104.18.206.236:8443#United States
+172.67.79.36:8443#United States
+104.16.190.143:8443#United States
+104.18.34.215:8443#United Kingdom
+104.16.207.147:8443#United States
+104.16.47.33:8443#United States
+104.17.255.97:8443#United States
+104.21.237.103:8443#United States
+104.19.191.250:8443#United States
+104.18.205.143:8443#United States
+104.16.127.153:8443#United States
+104.19.30.92:8443#United States
+104.19.61.254:8443#United States
+104.19.45.174:8443#United States
+104.21.237.84:8443#United States
