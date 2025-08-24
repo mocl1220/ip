@@ -9,6 +9,9 @@ urls = [
     'https://cf.090227.xyz', 
     'https://stock.hostmonit.com/CloudFlareYes',
     'https://ip.164746.xyz/',
+    'https://ipdb.api.030101.xyz/?type=bestcf&country=true',
+    'https://addressesapi.090227.xyz/ip.164746.xyz',
+    'https://addressesapi.090227.xyz/CloudFlareYes',
     'https://www.wetest.vip/page/cloudflare/address_v4.html'
 ]
 
