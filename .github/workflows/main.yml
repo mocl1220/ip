@@ -5,6 +5,9 @@ on:
     - cron: '0 */3 * * *'   # 每3小时执行一次，UTC时间
   workflow_dispatch:         # 允许手动触发
 
+permissions:
+  contents: write
+  
 jobs:
   collect-ips:
     runs-on: ubuntu-latest
