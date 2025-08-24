@@ -3,8 +3,6 @@ import re
 import os
 import time
 
-# ip9.com.cn查询的国家代码不太准确
-
 # 目标URL列表
 urls = [
     'https://ip.164746.xyz', 
