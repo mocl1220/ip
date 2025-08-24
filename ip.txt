@@ -1,15 +1,1 @@
-104.19.142.42:8443#United States
-104.18.38.188:8443#United Kingdom
-104.18.31.27:8443#United Kingdom
-104.16.141.104:8443#United Kingdom
-104.19.238.253:8443#United Kingdom
-104.20.45.29:8443#United States
-104.17.190.142:8443#United States
-172.66.3.195:8443#United States
-104.17.191.141:8443#United States
-104.20.14.227:8443#United States
-172.67.207.134:8443#Netherlands
-172.67.206.40:8443#Netherlands
-104.21.237.91:8443#United States
-104.21.61.206:8443#Netherlands
-104.21.223.95:8443#Netherlands
+104.16.79.139:8443#美国
