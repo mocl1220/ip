@@ -69,7 +69,7 @@ if unique_ips:
     for ip in sorted_ips:
         country = get_country(ip)
         results.append(f"{ip}:8443#{country}")
-        time.sleep(0.5)  # 防止请求过快被封
+        time.sleep(1)  # 防止请求过快被封
 
     with open('ip.txt', 'w', encoding='utf-8') as file:
         for line in results:
