@@ -93,7 +93,7 @@ def main():
             except Exception as e:
                 print(f"URL {url} generated an exception: {e}")
 
-    output_file = 'ip.txt'
+    output_file = 'ip_auto.txt'
     with open(output_file, 'w') as f:
         for ip in sorted(list(all_ips)):
             f.write(ip + '\n')
