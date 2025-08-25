@@ -1,4 +1,4 @@
-import requests
+import cloudscraper
 import re
 import os
 import time
@@ -18,10 +18,12 @@ if os.path.exists('test.txt'):
 # 使用集合存储IP地址实现自动去重
 unique_ips = set()
 
+scraper = cloudscraper.create_scraper()
+
 for url in urls:
     try:
-        # 发送HTTP请求获取网页内容
-        response = requests.get(url, timeout=5)
+        # 发送HTTP请求获取网页内容（使用cloudscraper）
+        response = scraper.get(url, timeout=10)
         
         # 确保请求成功
         if response.status_code == 200:
@@ -33,7 +35,9 @@ for url in urls:
             
             # 将找到的IP添加到集合中（自动去重）
             unique_ips.update(ip_matches)
-    except requests.exceptions.RequestException as e:
+        else:
+            print(f'请求 {url} 返回状态码: {response.status_code}')
+    except Exception as e:
         print(f'请求 {url} 失败: {e}')
         continue
 
@@ -41,11 +45,12 @@ for url in urls:
 def get_country_code(ip):
     try:
         url = f'https://api.ipinfo.io/lite/{ip}?token=6f75ff6b8f013b'
-        resp = requests.get(url, timeout=5)
+        resp = scraper.get(url, timeout=5)
         if resp.status_code == 200:
             # API返回格式: {"ip":"104.16.111.209","hostname":"...","country":"US",...}
             data = resp.json()
-            return data.get('country_code', 'ZZ')
+            # ipinfo 真实返回字段为 country，不是 country_code
+            return data.get('country', 'ZZ')
         else:
             return 'ZZ'
     except Exception as e:
