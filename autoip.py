@@ -52,7 +52,7 @@ def get_country_code(ip):
         if resp.status_code == 200:
             # API返回格式: {"ip":"104.16.111.209","hostname":"...","country":"US",...}
             data = resp.json()
-            return data.get('country', 'ZZ')
+            return data.get('country_code', 'ZZ')
         else:
             return 'ZZ'
     except Exception as e:
