@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '*/55 * * * *'
   workflow_dispatch:         # 允许手动触发
 
 permissions:
