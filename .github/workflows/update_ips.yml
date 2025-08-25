@@ -1,1 +1,47 @@
+name: Update IP List
 
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '*/30 * * * *'
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests requests-html
+          
+      - name: Run Python script
+        run: python auto_fetch_ip.py
+        
+      - name: Check for changes
+        id: git-status
+        run: |
+          if [[ -n $(git status --porcelain ip_auto.txt) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit and push changes
+        if: steps.git-status.outputs.has_changes == 'true'
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add ip_auto.txt
+          git commit -m "chore: Update ip_auto.txt with the latest IPs"
+          git push
