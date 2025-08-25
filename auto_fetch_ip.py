@@ -2,6 +2,8 @@ import requests
 from requests_html import HTMLSession
 import re
 import os
+import time
+import random
 from concurrent.futures import ThreadPoolExecutor
 
 # 要抓取的URL列表
@@ -19,31 +21,39 @@ urls = [
 # 用于匹配 IP:端口 或 IP 的正则表达式
 ip_pattern = r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?::[0-9]{1,5})?\b'
 
+# 添加伪造的User-Agent头
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
 }
 
 def is_dynamic_page(text):
+    """
+    基于内容判断是否为动态加载的页面。
+    只在包含特定JS标记时才返回True。
+    """
     return any(marker in text for marker in ['window.location.href', 'window.__CF$cv$params', '<noscript>'])
 
 def fetch_static_content(url):
+    """使用requests获取静态内容。"""
     try:
         print(f"尝试使用 requests 获取: {url}")
         response = requests.get(url, headers=HEADERS, timeout=10)
         response.raise_for_status()
         text = response.text
         if is_dynamic_page(text):
-            return None
+            return None # 返回None，表示需要渲染
         return text
     except requests.exceptions.RequestException as e:
         print(f"Error fetching {url}: {e}")
         return ""
 
 def fetch_rendered_content(url):
+    """使用requests-html渲染动态页面。"""
     print(f"切换至 requests-html 渲染: {url}")
     try:
         session = HTMLSession()
         r = session.get(url, headers=HEADERS, timeout=15)
+        # 强制渲染，timeout确保不会无限等待
         r.html.render(timeout=30)
         return r.html.full_text
     except Exception as e:
@@ -59,8 +69,9 @@ def process_text_to_ips(text):
     return list(ip_set)
 
 def query_country(ip):
-    """用api查询IP（不含端口）对应的国家名，出错则返回'未知'"""
+    """用api查询IP（不含端口）对应的国家名，带随机sleep，出错则返回'未知'"""
     base_ip = ip.split(':')[0]
+    time.sleep(random.uniform(0.5, 1.5))  # 加入随机sleep
     try:
         url = f'https://ip9.com.cn/get?ip={base_ip}'
         resp = requests.get(url, timeout=8)
@@ -76,6 +87,7 @@ def main():
     all_ips = set()
     urls_to_render = []
 
+    # 1. 使用线程池并发获取所有URL的静态内容
     with ThreadPoolExecutor(max_workers=8) as executor:
         future_to_url = {executor.submit(fetch_static_content, url): url for url in urls}
         for future in future_to_url:
@@ -83,6 +95,7 @@ def main():
             try:
                 text = future.result()
                 if text is None:
+                    # 如果返回None，说明需要渲染，加入渲染列表
                     urls_to_render.append(url)
                 else:
                     ips = process_text_to_ips(text)
@@ -90,6 +103,7 @@ def main():
             except Exception as e:
                 print(f"URL {url} generated an exception: {e}")
 
+    # 2. 顺序处理需要渲染的URL
     for url in urls_to_render:
         text = fetch_rendered_content(url)
         if text:
@@ -99,7 +113,7 @@ def main():
     # 查询每个IP的国家，并格式化输出
     output_lines = []
     print(f"正在查询全部 {len(all_ips)} 个IP的国家信息...")
-    with ThreadPoolExecutor(max_workers=8) as executor:
+    with ThreadPoolExecutor(max_workers=3) as executor:  # 控制并发线程数为3
         ip_to_country = list(executor.map(query_country, all_ips))
     for ip_port, country in zip(all_ips, ip_to_country):
         output_lines.append(f"{ip_port}#{country}")
