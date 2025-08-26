@@ -1,0 +1,32 @@
+name: Collect IPs and Save to Files
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'  # 每天凌晨2点运行一次，可根据需要调整
+
+jobs:
+  collect-ip-addresses:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run IP collection script
+        run: python autoip.py
+
+      - name: Commit and push results
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update ip.txt and ipv6.txt [auto]"
+          file_pattern: ip.txt ipv6.txt
+          commit_user_name: GitHub Action
+          commit_user_email: action@github.com
