@@ -98,7 +98,7 @@ if unique_ipv6:
     results_v6 = []
     for ip in sorted_ipv6:
         country_code = get_country_code(ip)
-        results_v6.append(f"{ip}#{country_code}-IPV6")
+        results_v6.append(f"[{ip}]:8443#{country_code}-IPV6")
         time.sleep(1)
     with open('ipv6.txt', 'w', encoding='utf-8') as file:
         for line in results_v6:
