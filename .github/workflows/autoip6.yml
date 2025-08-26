@@ -12,6 +12,12 @@ jobs:
   collect-ip-addresses:
     runs-on: ubuntu-latest
     steps:
+      - name: Delete previous workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          retain_days: 0
+          keep_minimum_runs: 3
+
       - name: Check out repository
         uses: actions/checkout@v4
 
