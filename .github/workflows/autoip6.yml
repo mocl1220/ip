@@ -1,9 +1,12 @@
 name: Collect IPs and Save to Files
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *'  # 每天凌晨2点运行一次，可根据需要调整
+    - cron: '0/55 * * * *'   # 每55分钟执行一次，UTC时间
+  workflow_dispatch:         # 允许手动触发
+
+permissions:
+  contents: write
 
 jobs:
   collect-ip-addresses:
