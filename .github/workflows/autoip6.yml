@@ -21,7 +21,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests ipaddress
 
       - name: Run IP collection script
         run: python autoip6.py
