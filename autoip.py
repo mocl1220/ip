@@ -12,6 +12,9 @@ urls = [
     'https://ipdb.api.030101.xyz/?type=bestcf&country=true',
     'https://addressesapi.090227.xyz/ip.164746.xyz',
     'https://addressesapi.090227.xyz/CloudFlareYes',
+    'https://api.uouin.com/cloudflare.html',
+    'https://raw.githubusercontent.com/ymyuuu/IPDB/main/BestCF/bestcfv4.txt',
+    'https://www.wetest.vip/page/cloudflare/address_v6.html',
     'https://www.wetest.vip/page/cloudflare/address_v4.html'
 ]
 
