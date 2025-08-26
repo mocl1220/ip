@@ -2,6 +2,7 @@ import requests
 import re
 import os
 import time
+import ipaddress
 
 # 目标URL列表
 urls = [
@@ -18,9 +19,9 @@ urls = [
     'https://www.wetest.vip/page/cloudflare/address_v4.html'
 ]
 
-# 正则表达式用于匹配IPV4与IPV6地址
+# 正则表达式用于初步匹配IPV4与IPV6地址（配合ipaddress库二次过滤）
 ipv4_pattern = r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b'
-ipv6_pattern = r'\b(?:[A-F0-9]{1,4}:){1,7}[A-F0-9]{1,4}\b'  # 简单版，足够用
+ipv6_pattern = r'\b(?:[A-F0-9a-f]{1,4}:){1,7}[A-F0-9a-f]{1,4}\b'  # 加入小写支持
 
 # 检查ip.txt和ipv6.txt文件是否存在,如果存在则删除它
 if os.path.exists('ip.txt'):
@@ -43,11 +44,23 @@ for url in urls:
             html_content = response.text
             
             # 使用正则表达式查找IP地址
-            ipv4_matches = re.findall(ipv4_pattern, html_content, re.IGNORECASE)
-            ipv6_matches = re.findall(ipv6_pattern, html_content, re.IGNORECASE)
+            ipv4_matches = re.findall(ipv4_pattern, html_content)
+            ipv6_matches = re.findall(ipv6_pattern, html_content)
             
-            unique_ipv4.update(ipv4_matches)
-            unique_ipv6.update([ip.lower() for ip in ipv6_matches if ip.count(':') >= 2])  # 粗略过滤合法性
+            # 用ipaddress校验并去重
+            for ip in ipv4_matches:
+                try:
+                    ipaddress.IPv4Address(ip)
+                    unique_ipv4.add(ip)
+                except ValueError:
+                    continue
+            for ip in ipv6_matches:
+                try:
+                    # 粗略过滤后进一步用ipaddress校验
+                    ip_obj = ipaddress.IPv6Address(ip)
+                    unique_ipv6.add(ip.lower())
+                except ValueError:
+                    continue
     except requests.exceptions.RequestException as e:
         print(f'请求 {url} 失败: {e}')
         continue
@@ -59,7 +72,6 @@ def get_country_code(ip):
         resp = requests.get(url, timeout=5)
         if resp.status_code == 200:
             data = resp.json()
-            # ipinfo有的返回country，有的返回country_code，这里都兼容
             return data.get('country_code') or data.get('country') or 'ZZ'
         else:
             return 'ZZ'
