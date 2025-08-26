@@ -1,8 +1,8 @@
 name: Collect IPs and Save to Files
 
 on:
-  schedule:
-    - cron: '0/55 * * * *'   # 每55分钟执行一次，UTC时间
+#  schedule:
+#    - cron: '0/55 * * * *'   # 每55分钟执行一次，UTC时间
   workflow_dispatch:         # 允许手动触发
 
 permissions:
