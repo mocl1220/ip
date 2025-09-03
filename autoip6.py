@@ -7,6 +7,7 @@ import ipaddress
 # 目标URL列表
 urls = [
     'https://ip.164746.xyz', 
+    'https://api.uouin.com/cloudflare.html',
     'https://ipdb.api.030101.xyz/?type=bestcf&country=true',
     'https://addressesapi.090227.xyz/CloudFlareYes',
     'https://raw.githubusercontent.com/ymyuuu/IPDB/main/BestCF/bestcfv4.txt',
